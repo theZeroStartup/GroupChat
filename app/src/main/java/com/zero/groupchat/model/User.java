@@ -5,6 +5,7 @@ public class User {
     private String imgProfileUri;
     private String fullName;
     private String userName;
+    private String userId;
     private int publisher;
     private boolean isAdded;
 
@@ -21,6 +22,14 @@ public class User {
         this.fullName = fullName;
         this.userName = userName;
         this.publisher = publisher;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public boolean isAdded() {

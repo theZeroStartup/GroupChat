@@ -72,6 +72,8 @@ public class AddMembersActivity extends AppCompatActivity implements ItemClickLi
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
 
+                    user.setUserId(snapshot.getKey());
+
                     user.setAdded(addedMemberNames.contains(user.getFullName()));
 
                     usersList.add(user);
