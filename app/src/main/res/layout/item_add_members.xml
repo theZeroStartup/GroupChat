@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="@dimen/_10sdp">
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cbAddMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/civUserImage"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:textSize="@dimen/_14ssp"
+        tools:text="Chat name" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civUserImage"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

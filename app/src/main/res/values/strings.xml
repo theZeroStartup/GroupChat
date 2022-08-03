@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Group Chat</string>
+    <string name="new_chat">New Chat</string>
+    <string name="type_something">Type something...</string>
+    <string name="send">Send</string>
+    <string name="lorem_ipsum">Lorem Ipsum</string>
 </resources>
