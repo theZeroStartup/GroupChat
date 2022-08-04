@@ -63,20 +63,20 @@ public class NewChatActivity extends AppCompatActivity {
             }
             DatabaseReference newGroupReference = groupChatsReference.push();
             String chatId = newGroupReference.getKey();
-            newGroupReference.child("members")
-                    .setValue(userIds).addOnCompleteListener(this, task -> {
+            newGroupReference.child("name").setValue(binding.etGroupName.getText().toString().trim())
+                            .addOnCompleteListener(this, task1 -> newGroupReference.child("members")
+                                    .setValue(userIds).addOnCompleteListener(this, task -> {
 
-                        HashMap<String, Object> dataMap = new HashMap<>();
-                        for (String user: userIds){
-                            dataMap.put(user + "/myChats/" + chatId, chatId);
-                        }
+                                        HashMap<String, Object> dataMap = new HashMap<>();
+                                        for (String user: userIds){
+                                            dataMap.put(user + "/myChats/" + chatId, chatId);
+                                        }
 
-
-                        usersReference.updateChildren(dataMap, (error, ref) -> {
-                            Toast.makeText(this, "Group Created Successfully!", Toast.LENGTH_LONG).show();
-                            finish();
-                        });
-                    });
+                                        usersReference.updateChildren(dataMap, (error, ref) -> {
+                                            Toast.makeText(this, "Group Created Successfully!", Toast.LENGTH_LONG).show();
+                                            finish();
+                                        });
+                                    }));
         }
     }
 
