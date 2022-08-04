@@ -6,6 +6,7 @@ public class User {
     private String fullName;
     private String userName;
     private String userId;
+    private String chatId;
     private int publisher;
     private boolean isAdded;
 
@@ -22,6 +23,14 @@ public class User {
         this.fullName = fullName;
         this.userName = userName;
         this.publisher = publisher;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
     }
 
     public String getUserId() {

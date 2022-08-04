@@ -69,7 +69,7 @@ public class NewChatActivity extends AppCompatActivity {
 
                                         HashMap<String, Object> dataMap = new HashMap<>();
                                         for (String user: userIds){
-                                            dataMap.put(user + "/myChats/" + chatId, chatId);
+                                            dataMap.put(user + "/myChats/" + chatId, binding.etGroupName.getText().toString().trim());
                                         }
 
                                         usersReference.updateChildren(dataMap, (error, ref) -> {
