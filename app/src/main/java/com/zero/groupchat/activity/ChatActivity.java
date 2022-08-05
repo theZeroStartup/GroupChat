@@ -124,7 +124,12 @@ public class ChatActivity extends AppCompatActivity {
             String timestamp = sdf.format(new Date().getTime());
             Chat chat = new Chat(controller.getUsername(), controller.getUserId(), controller.getImageUrl(), message, timestamp);
 
-            myChatReference.push().setValue(chat);
+            myChatReference.push().setValue(chat)
+                    .addOnCompleteListener(this, task -> {
+                        if (chatList == null){
+                            getMessages();
+                        }
+                    });
         }
     }
 
