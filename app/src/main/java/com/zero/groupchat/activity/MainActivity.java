@@ -20,23 +20,11 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.tvUserNumberOne.setOnClickListener(view -> {
-            UserController.getInstance().setUserId("HiCukX3oejYkmLq0gIZiBWT23");
 
-            redirectToChatList();
-        });
-
-        binding.tvUserNumberTwo.setOnClickListener(view -> {
+        new Handler(getMainLooper()).postDelayed(() -> {
             UserController.getInstance().setUserId("HiCukX3oejYkmLq0gIZiBWTsPSv2");
-
             redirectToChatList();
-        });
-
-        binding.tvUserNumberThree.setOnClickListener(view -> {
-            UserController.getInstance().setUserId("HiCukX3oejYkmLq0gIZiBWTsPSv3");
-
-            redirectToChatList();
-        });
+        }, 2000);
 
     }
 

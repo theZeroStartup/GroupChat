@@ -63,20 +63,24 @@ public class NewChatActivity extends AppCompatActivity {
             }
             DatabaseReference newGroupReference = groupChatsReference.push();
             String chatId = newGroupReference.getKey();
-            newGroupReference.child("name").setValue(binding.etGroupName.getText().toString().trim())
-                            .addOnCompleteListener(this, task1 -> newGroupReference.child("members")
-                                    .setValue(userIds).addOnCompleteListener(this, task -> {
 
-                                        HashMap<String, Object> dataMap = new HashMap<>();
-                                        for (String user: userIds){
-                                            dataMap.put(user + "/myChats/" + chatId, binding.etGroupName.getText().toString().trim());
-                                        }
+            HashMap<String, Object> groupDataMap = new HashMap<>();
+            groupDataMap.put("name", binding.etGroupName.getText().toString().trim());
+            groupDataMap.put("members", userIds);
 
-                                        usersReference.updateChildren(dataMap, (error, ref) -> {
-                                            Toast.makeText(this, "Group Created Successfully!", Toast.LENGTH_LONG).show();
-                                            finish();
-                                        });
-                                    }));
+            newGroupReference.updateChildren(groupDataMap, (error, ref) -> {
+
+                HashMap<String, Object> dataMap = new HashMap<>();
+                for (String user: userIds){
+                    dataMap.put(user + "/myChats/" + chatId + "/groupName", binding.etGroupName.getText().toString().trim());
+                    dataMap.put(user + "/myChats/" + chatId + "/chatId", chatId);
+                }
+
+                usersReference.updateChildren(dataMap, (e, r) -> {
+                    Toast.makeText(NewChatActivity.this, "Group Created Successfully!", Toast.LENGTH_LONG).show();
+                    finish();
+                });
+            });
         }
     }
 

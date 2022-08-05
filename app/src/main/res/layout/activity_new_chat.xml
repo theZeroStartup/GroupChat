@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.NewChatActivity">
@@ -12,6 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:hint="Group name"
+        android:textColorHint="#616161"
+        android:textColor="@color/black"
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/_20sdp"/>
 
@@ -20,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Members"
+        android:textColor="@color/black"
         android:layout_marginTop="@dimen/_20sdp"
         android:layout_below="@id/etGroupName"
         android:textSize="@dimen/_14ssp"
@@ -42,6 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/fabAdd"
         android:layout_alignBottom="@id/fabAdd"
+        android:textColor="@color/black"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:layout_toStartOf="@id/fabAdd"
         android:text="Create Group"/>

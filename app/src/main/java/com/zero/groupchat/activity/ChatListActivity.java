@@ -17,6 +17,7 @@ import com.zero.groupchat.controller.UserController;
 import com.zero.groupchat.databinding.ActivityChatListBinding;
 import com.zero.groupchat.databinding.ActivityMainBinding;
 import com.zero.groupchat.listener.ItemClickListener;
+import com.zero.groupchat.model.MyChat;
 import com.zero.groupchat.model.User;
 
 import java.util.ArrayList;
@@ -63,11 +64,12 @@ public class ChatListActivity extends AppCompatActivity implements ItemClickList
 
                 myChatsList = new ArrayList<>();
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                    String chatName = snapshot.getValue(String.class);
+                    MyChat myChat = snapshot.getValue(MyChat.class);
 
                     User user = new User();
-                    user.setUserName(chatName);
-                    user.setChatId(snapshot.getKey());
+                    user.setUserName(myChat.getGroupName());
+                    user.setChatId(myChat.getChatId());
+                    user.setImgProfileUri(myChat.getGroupImage());
                     myChatsList.add(user);
                 }
 

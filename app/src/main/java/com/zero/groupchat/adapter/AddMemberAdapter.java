@@ -68,6 +68,10 @@ public class AddMemberAdapter extends RecyclerView.Adapter<AddMemberAdapter.View
         notifyDataSetChanged();
     }
 
+    public void updateItem(int position){
+        notifyItemChanged(position);
+    }
+
     @Override
     public int getItemCount() {
         return membersList.size();
