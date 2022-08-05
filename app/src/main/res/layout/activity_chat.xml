@@ -26,9 +26,7 @@
         android:alpha=".8"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="@dimen/_10sdp"
-        app:cardElevation="@dimen/_7sdp"
-        app:cardUseCompatPadding="true"
-        app:cardPreventCornerOverlap="true">
+        app:cardElevation="@dimen/_7sdp">
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -9,26 +9,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.zero.groupchat.databinding.ItemChatsBinding;
+import com.zero.groupchat.databinding.ItemMessageBinding;
 import com.zero.groupchat.listener.ItemClickListener;
+import com.zero.groupchat.model.Chat;
 import com.zero.groupchat.model.User;
 
 import java.util.List;
 
-public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHolder> {
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private Context context;
-    private List<User> chatList;
-    private ItemClickListener listener;
+    private List<Chat> chatList;
 
-    public ChatListAdapter(Context context, List<User> chatList, ItemClickListener listener) {
+    public ChatAdapter(Context context, List<Chat> chatList) {
         this.context = context;
         this.chatList = chatList;
-        this.listener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ItemChatsBinding binding;
-        public ViewHolder(@NonNull ItemChatsBinding binding) {
+        ItemMessageBinding binding;
+        public ViewHolder(@NonNull ItemMessageBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
@@ -37,25 +37,21 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemChatsBinding binding = ItemChatsBinding.inflate(LayoutInflater.from(context), parent, false);
+        ItemMessageBinding binding = ItemMessageBinding.inflate(LayoutInflater.from(context), parent, false);
         return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User chat = chatList.get(position);
+        Chat chat = chatList.get(position);
 
-        holder.binding.tvUsername.setText(chat.getUserName());
-//        holder.binding.tvMessageCount.setText(chat.getMessageCount());
+        holder.binding.tvMessage.setText(chat.getMessage());
+        holder.binding.tvTimestamp.setText(chat.getTimestamp());
 
-        Glide.with(context).load(chat.getImgProfileUri()).into(holder.binding.civUserImage);
-
-        holder.binding.getRoot().setOnClickListener(view -> {
-            listener.onItemClicked(position, "Chat");
-        });
+        Glide.with(context).load(chat.getSenderImg()).into(holder.binding.messageUserImage);
     }
 
-    public void updateData(List<User> chatList){
+    public void updateData(List<Chat> chatList){
         this.chatList = chatList;
         notifyDataSetChanged();
     }
@@ -65,7 +61,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         return chatList.size();
     }
 
-    public List<User> getChatList(){
+    public List<Chat> getChatList(){
         return chatList;
     }
 

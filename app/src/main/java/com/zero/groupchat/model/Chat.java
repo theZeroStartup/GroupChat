@@ -1,48 +1,73 @@
 package com.zero.groupchat.model;
 
-import android.net.Uri;
-
 public class Chat {
 
-    private Uri userImage;
-    private String username;
-    private String messageCount;
+    private String sender;
+    private String senderId;
+    private String senderImg;
+    private String message;
+    private String timestamp;
 
     public Chat() {
     }
 
-    public Chat(Uri userImage, String username) {
-        this.userImage = userImage;
-        this.username = username;
+    public Chat(String sender, String senderId, String senderImg, String message, String timestamp) {
+        this.sender = sender;
+        this.senderId = senderId;
+        this.senderImg = senderImg;
+        this.message = message;
+        this.timestamp = timestamp;
     }
 
-    public Chat(Uri userImage, String username, String messageCount) {
-        this.userImage = userImage;
-        this.username = username;
-        this.messageCount = messageCount;
+    public String getSenderId() {
+        return senderId;
     }
 
-    public Uri getUserImage() {
-        return userImage;
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
-    public void setUserImage(Uri userImage) {
-        this.userImage = userImage;
+    public String getSender() {
+        return sender;
     }
 
-    public String getUsername() {
-        return username;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getSenderImg() {
+        return senderImg;
     }
 
-    public String getMessageCount() {
-        return messageCount;
+    public void setSenderImg(String senderImg) {
+        this.senderImg = senderImg;
     }
 
-    public void setMessageCount(String messageCount) {
-        this.messageCount = messageCount;
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Chat{" +
+                "sender='" + sender + '\'' +
+                ", senderId='" + senderId + '\'' +
+                ", senderImg='" + senderImg + '\'' +
+                ", message='" + message + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                '}';
     }
 }

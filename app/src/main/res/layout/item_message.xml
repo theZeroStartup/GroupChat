@@ -12,25 +12,26 @@
         android:gravity="end"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/message_display"
+            android:id="@+id/tvMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lorem_ipsum"
             android:textColor="@android:color/white"
             android:background="@drawable/custom_messages"
             android:fontFamily="casual"
+            android:paddingVertical="@dimen/_10sdp"
+            android:paddingHorizontal="@dimen/_15sdp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:padding="@dimen/_7sdp"
             android:layout_marginStart="@dimen/_7sdp"/>
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/message_user_image"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_gravity="center_horizontal"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_gravity="center"
             android:scaleType="centerCrop"/>
     </LinearLayout>
     <TextView
-        android:id="@+id/tvUsername"
+        android:id="@+id/tvTimestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
