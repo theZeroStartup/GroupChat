@@ -10,6 +10,7 @@ public class UserController extends Application {
     private String username;
     private String userId;
     private String imageUrl;
+    private User user;
     private List<User> userList;
     private static UserController instance;
 
@@ -23,6 +24,14 @@ public class UserController extends Application {
         if (instance == null)
             instance = new UserController();
         return instance;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public UserController() {
