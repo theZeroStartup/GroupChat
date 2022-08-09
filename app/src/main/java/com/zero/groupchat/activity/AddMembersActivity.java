@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,7 +40,7 @@ public class AddMembersActivity extends AppCompatActivity implements ItemClickLi
     private ActivityAddMembersBinding binding;
 
     private AddMemberAdapter addMemberAdapter;
-    private UserController userController = UserController.getInstance();
+    private final UserController userController = UserController.getInstance();
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference usersReference = database.getReference("users");
@@ -67,8 +69,43 @@ public class AddMembersActivity extends AppCompatActivity implements ItemClickLi
             finish();
         });
 
+        binding.etUserSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                showSearchResults(editable.toString().trim());
+            }
+        });
+
         initRecyclerView();
         getUsers();
+    }
+
+    private void showSearchResults(String regex) {
+        if (regex.isEmpty()){
+            addMemberAdapter.updateData(usersList);
+        }
+        else if (addMemberAdapter != null && usersList != null){
+            if (!usersList.isEmpty()){
+                List<User> filteredUserList = new ArrayList<>();
+
+                for (User user: usersList){
+                    if (user.getFullName().startsWith(regex))
+                        filteredUserList.add(user);
+                }
+
+                addMemberAdapter.updateData(filteredUserList);
+            }
+        }
     }
 
     private void getUsers() {
@@ -90,10 +127,17 @@ public class AddMembersActivity extends AppCompatActivity implements ItemClickLi
                         UserController.getInstance().setUser(user);
 
                     user.setAdded(addedMemberNames.contains(user.getFullName()));
-                    usersList.add(user);
+
+                    if (!Objects.equals(snapshot.getKey(), userController.getUserId())) {
+                        usersList.add(user);
+                    }
+                    else if (!addedMemberNames.contains(user.getFullName())){
+                        addedMembers.add(user);
+                    }
 
                     downloadImageUsingGlideGetLink(user.getUserName(), usersList.size() - 1);
                 }
+
 
                 addMemberAdapter.updateData(usersList);
             }

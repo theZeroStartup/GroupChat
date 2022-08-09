@@ -7,11 +7,23 @@
     android:layout_height="match_parent"
     tools:context=".activity.AddMembersActivity">
 
+    <EditText
+        android:id="@+id/etUserSearch"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:hint="Search users"
+        android:textColorHint="#616161"
+        android:textColor="@color/black"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/_20sdp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMembers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/_5sdp"
+        android:layout_below="@id/etUserSearch"
         tools:listitem="@layout/item_add_members" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

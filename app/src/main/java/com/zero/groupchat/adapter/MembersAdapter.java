@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.zero.groupchat.R;
+import com.zero.groupchat.controller.UserController;
 import com.zero.groupchat.databinding.ItemAddMembersBinding;
 import com.zero.groupchat.databinding.ItemMembersBinding;
 import com.zero.groupchat.listener.ItemClickListener;
@@ -46,7 +47,10 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = membersList.get(position);
 
-        holder.binding.tvUsername.setText(user.getFullName());
+        if (user.getUserId().equals(UserController.getInstance().getUserId()))
+            holder.binding.tvUsername.setText("Me");
+        else
+            holder.binding.tvUsername.setText(user.getFullName());
 
         Glide.with(context).load(user.getImgProfileUri()).placeholder(R.drawable.user).into(holder.binding.civUserImage);
     }
