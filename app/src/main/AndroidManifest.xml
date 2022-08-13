@@ -24,6 +24,9 @@
             android:name=".activity.AddMembersActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.EditMembersActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ChatActivity"
             android:exported="false" />
         <activity

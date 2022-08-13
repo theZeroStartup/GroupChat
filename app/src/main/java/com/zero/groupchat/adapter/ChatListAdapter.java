@@ -1,7 +1,9 @@
 package com.zero.groupchat.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -46,13 +48,17 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         User chat = chatList.get(position);
 
         holder.binding.tvUsername.setText(chat.getUserName());
-//        holder.binding.tvMessageCount.setText(chat.getMessageCount());
+        if (chat.getMessageUnreadCount() != null && chat.getMessageUnreadCount().getUnreadMessageCount() != 0) {
+            holder.binding.tvMessageCount.setVisibility(View.VISIBLE);
+            String unreadMessageCount = String.valueOf(chat.getMessageUnreadCount().getUnreadMessageCount());
+            holder.binding.tvMessageCount.setText(unreadMessageCount);
+        }
+        else
+            holder.binding.tvMessageCount.setVisibility(View.GONE);
 
         Glide.with(context).load(chat.getImgProfileUri()).into(holder.binding.civUserImage);
 
-        holder.binding.getRoot().setOnClickListener(view -> {
-            listener.onItemClicked(position, "Chat");
-        });
+        holder.binding.getRoot().setOnClickListener(view -> listener.onItemClicked(position, "Chat"));
     }
 
     public void updateData(List<User> chatList){

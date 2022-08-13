@@ -1,12 +1,16 @@
 package com.zero.groupchat.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -18,6 +22,7 @@ import com.zero.groupchat.databinding.ActivityChatListBinding;
 import com.zero.groupchat.databinding.ActivityMainBinding;
 import com.zero.groupchat.listener.ItemClickListener;
 import com.zero.groupchat.model.MyChat;
+import com.zero.groupchat.model.UnreadMessageCount;
 import com.zero.groupchat.model.User;
 
 import java.util.ArrayList;
@@ -35,6 +40,7 @@ public class ChatListActivity extends AppCompatActivity implements ItemClickList
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myChatsReference = database.getReference("users/" + userController.getUserId() + "/myChats");
+    DatabaseReference unreadMessageCountReference;
     DatabaseReference usersReference = database.getReference("users");
 
     @Override
@@ -65,15 +71,26 @@ public class ChatListActivity extends AppCompatActivity implements ItemClickList
                 myChatsList = new ArrayList<>();
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     MyChat myChat = snapshot.getValue(MyChat.class);
-
                     User user = new User();
-                    user.setUserName(myChat.getGroupName());
-                    user.setChatId(myChat.getChatId());
-                    user.setImgProfileUri(myChat.getGroupImage());
-                    myChatsList.add(user);
-                }
 
-                chatListAdapter.updateData(myChatsList);
+                    unreadMessageCountReference = database.getReference("chats/" + myChat.getChatId()
+                            + "/unreadMessageCount/" + UserController.getInstance().getUserId());
+
+                    unreadMessageCountReference.get().addOnCompleteListener(this, task1 -> {
+
+                        if (task1.getResult().exists()) {
+                            user.setUserName(myChat.getGroupName());
+                            user.setChatId(myChat.getChatId());
+                            user.setImgProfileUri(myChat.getGroupImage());
+
+                            user.setMessageUnreadCount(task1.getResult().getValue(UnreadMessageCount.class));
+                        }
+
+                        myChatsList.add(user);
+
+                        chatListAdapter.updateData(myChatsList);
+                    });
+                }
             }
         });
     }
@@ -89,6 +106,7 @@ public class ChatListActivity extends AppCompatActivity implements ItemClickList
     public void onItemClicked(int position, String type) {
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra("chatId", chatListAdapter.getChatList().get(position).getChatId());
+        intent.putExtra("chatName", chatListAdapter.getChatList().get(position).getUserName());
         startActivity(intent);
     }
 }

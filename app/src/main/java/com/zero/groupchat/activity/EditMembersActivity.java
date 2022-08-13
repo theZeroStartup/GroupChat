@@ -1,23 +1,16 @@
 package com.zero.groupchat.activity;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,24 +20,30 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.zero.groupchat.adapter.AddMemberAdapter;
 import com.zero.groupchat.controller.UserController;
 import com.zero.groupchat.databinding.ActivityAddMembersBinding;
-import com.zero.groupchat.databinding.ActivityNewChatBinding;
 import com.zero.groupchat.listener.ItemClickListener;
+import com.zero.groupchat.model.UnreadMessageCount;
 import com.zero.groupchat.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class AddMembersActivity extends AppCompatActivity implements ItemClickListener {
+public class EditMembersActivity extends AppCompatActivity implements ItemClickListener {
 
     private ActivityAddMembersBinding binding;
 
     private AddMemberAdapter addMemberAdapter;
     private final UserController userController = UserController.getInstance();
 
+    private String chatId;
+    private String chatName;
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference usersReference = database.getReference("users");
+    DatabaseReference groupChatsReference;
+    DatabaseReference unreadMessageCountReference;
 
     private List<User> addedMembers;
     private List<String> addedMemberNames;
@@ -57,6 +56,10 @@ public class AddMembersActivity extends AppCompatActivity implements ItemClickLi
         binding = ActivityAddMembersBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        chatId = getIntent().getStringExtra("chatId");
+        chatName = getIntent().getStringExtra("chatName");
+        groupChatsReference = database.getReference("chats/" + chatId);
+
         addedMembers = userController.getUserList();
         if (addedMembers == null) addedMembers = new ArrayList<>();
         addedMemberNames = new ArrayList<>();
@@ -67,7 +70,7 @@ public class AddMembersActivity extends AppCompatActivity implements ItemClickLi
         binding.fabAdd.setOnClickListener(view -> {
             userController.setUserList(null);
             userController.setUserList(addedMembers);
-            finish();
+            createGroupChat();
         });
 
         binding.etUserSearch.addTextChangedListener(new TextWatcher() {
@@ -122,21 +125,19 @@ public class AddMembersActivity extends AppCompatActivity implements ItemClickLi
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
 
-                    user.setUserId(snapshot.getKey());
+                    if (!UserController.getInstance().getGroupMembers().contains(snapshot.getKey())) {
+                        user.setUserId(snapshot.getKey());
 
-                    if (Objects.equals(user.getUserId(), UserController.getInstance().getUserId()))
-                        UserController.getInstance().setUser(user);
+                        user.setAdded(addedMemberNames.contains(user.getFullName()));
 
-                    user.setAdded(addedMemberNames.contains(user.getFullName()));
+                        if (!Objects.equals(snapshot.getKey(), userController.getUserId())) {
+                            usersList.add(user);
+                        } else if (!addedMemberNames.contains(user.getFullName())) {
+                            addedMembers.add(user);
+                        }
 
-                    if (!Objects.equals(snapshot.getKey(), userController.getUserId())) {
-                        usersList.add(user);
+                        downloadImageUsingGlideGetLink(user.getUserName(), usersList.size() - 1);
                     }
-                    else if (!addedMemberNames.contains(user.getFullName())){
-                        addedMembers.add(user);
-                    }
-
-                    downloadImageUsingGlideGetLink(user.getUserName(), usersList.size() - 1);
                 }
 
 
@@ -222,7 +223,7 @@ public class AddMembersActivity extends AppCompatActivity implements ItemClickLi
     private void initRecyclerView() {
         binding.rvMembers.setLayoutManager(new LinearLayoutManager(this));
         binding.rvMembers.setHasFixedSize(true);
-        addMemberAdapter = new AddMemberAdapter(this, new ArrayList<User>(), this);
+        addMemberAdapter = new AddMemberAdapter(this, new ArrayList<>(), this);
         binding.rvMembers.setAdapter(addMemberAdapter);
     }
 
@@ -240,6 +241,58 @@ public class AddMembersActivity extends AppCompatActivity implements ItemClickLi
             }
             if (removeAtPosition != -1)
                 addedMembers.remove(removeAtPosition);
+        }
+    }
+
+
+    private void createGroupChat() {
+        if (validate()){
+            List<String> userIds = new ArrayList<>();
+            for (User user: userController.getUserList()){
+                userIds.add(user.getUserId());
+            }
+
+            HashMap<String, Object> groupDataMap = new HashMap<>();
+            userIds.addAll(UserController.getInstance().getGroupMembers());
+            groupDataMap.put("members", userIds);
+
+            groupChatsReference.updateChildren(groupDataMap, (error, ref) -> {
+
+                HashMap<String, Object> dataMap = new HashMap<>();
+                HashMap<String, Object> unreadMessageMap = new HashMap<>();
+                for (String user: userIds){
+                    dataMap.put(user + "/myChats/" + chatId + "/groupName", chatName);
+                    dataMap.put(user + "/myChats/" + chatId + "/chatId", chatId);
+
+                    UnreadMessageCount unreadMessageCount = new UnreadMessageCount(user, 0);
+                    unreadMessageMap.put(user, unreadMessageCount);
+                }
+
+                usersReference.updateChildren(dataMap, (e, r) -> {
+                    unreadMessageCountReference = database.getReference("chats/" + chatId + "/unreadMessageCount");
+
+                    unreadMessageCountReference.updateChildren(unreadMessageMap, (err, reference) -> {
+                        Toast.makeText(EditMembersActivity.this, "Members added successfully!", Toast.LENGTH_LONG).show();
+                        finish();
+                    });
+                });
+            });
+        }
+    }
+
+    private boolean validate() {
+        if (userController.getUserList() != null) {
+            if (!userController.getUserList().isEmpty()){
+                return true;
+            }
+            else{
+                Toast.makeText(this, "Members cannot be empty", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
+        else{
+            Toast.makeText(this, "Members cannot be empty", Toast.LENGTH_LONG).show();
+            return false;
         }
     }
 }

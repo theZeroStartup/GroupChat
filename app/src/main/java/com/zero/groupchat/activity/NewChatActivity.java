@@ -20,6 +20,7 @@ import com.zero.groupchat.adapter.MembersAdapter;
 import com.zero.groupchat.controller.UserController;
 import com.zero.groupchat.databinding.ActivityChatBinding;
 import com.zero.groupchat.databinding.ActivityNewChatBinding;
+import com.zero.groupchat.model.UnreadMessageCount;
 import com.zero.groupchat.model.User;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class NewChatActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference groupChatsReference = database.getReference("chats");
     DatabaseReference usersReference = database.getReference("users");
+    DatabaseReference unreadMessageCountReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +73,22 @@ public class NewChatActivity extends AppCompatActivity {
             newGroupReference.updateChildren(groupDataMap, (error, ref) -> {
 
                 HashMap<String, Object> dataMap = new HashMap<>();
+                HashMap<String, Object> unreadMessageMap = new HashMap<>();
                 for (String user: userIds){
                     dataMap.put(user + "/myChats/" + chatId + "/groupName", binding.etGroupName.getText().toString().trim());
                     dataMap.put(user + "/myChats/" + chatId + "/chatId", chatId);
+
+                    UnreadMessageCount unreadMessageCount = new UnreadMessageCount(user, 0);
+                    unreadMessageMap.put(user, unreadMessageCount);
                 }
 
                 usersReference.updateChildren(dataMap, (e, r) -> {
+                    unreadMessageCountReference = database.getReference("chats/" + chatId + "/unreadMessageCount");
+
+                    unreadMessageCountReference.updateChildren(unreadMessageMap, (err, reference) -> {
                     Toast.makeText(NewChatActivity.this, "Group Created Successfully!", Toast.LENGTH_LONG).show();
                     finish();
+                    });
                 });
             });
         }

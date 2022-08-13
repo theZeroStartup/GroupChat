@@ -7,6 +7,7 @@
         <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/drawable-v24/custom_messages.xml" value="0.11" />
         <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/drawable-v24/custom_text_view.xml" value="0.11" />
         <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/drawable/bg_message_count.xml" value="0.11" />
+        <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.11" />
         <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/layout/activity_add_members.xml" value="0.176" />
         <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/layout/activity_chat.xml" value="0.264" />
         <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/layout/activity_chat_list.xml" value="0.21822916666666667" />
@@ -17,6 +18,8 @@
         <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/layout/item_chats.xml" value="0.2" />
         <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/layout/item_members.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/layout/item_message.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/menu-v26/chat_toolbar.xml" value="0.23125" />
+        <entry key="..\:/Users/theze/AndroidStudioProjects/GroupChat/app/src/main/res/menu/chat_toolbar.xml" value="0.23125" />
       </map>
     </option>
   </component>

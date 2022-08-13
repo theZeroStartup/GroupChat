@@ -9,6 +9,7 @@ public class User {
     private String chatId;
     private int publisher;
     private boolean isAdded;
+    private UnreadMessageCount messageUnreadCount;
 
     public User() {
     }
@@ -57,6 +58,15 @@ public class User {
         this.imgProfileUri = imgProfileUri;
     }
 
+    public UnreadMessageCount getMessageUnreadCount() {
+
+        return messageUnreadCount;
+    }
+
+    public void setMessageUnreadCount(UnreadMessageCount messageUnreadCount) {
+        this.messageUnreadCount = messageUnreadCount;
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -81,13 +91,18 @@ public class User {
         this.publisher = publisher;
     }
 
+
     @Override
     public String toString() {
         return "User{" +
-                "imgProfileUri=" + imgProfileUri +
+                "imgProfileUri='" + imgProfileUri + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", userName='" + userName + '\'' +
+                ", userId='" + userId + '\'' +
+                ", chatId='" + chatId + '\'' +
                 ", publisher=" + publisher +
+                ", isAdded=" + isAdded +
+                ", messageUnreadCount=" + messageUnreadCount +
                 '}';
     }
 }

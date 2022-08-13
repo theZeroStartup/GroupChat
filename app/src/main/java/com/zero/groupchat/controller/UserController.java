@@ -11,6 +11,7 @@ public class UserController extends Application {
     private String userId;
     private String imageUrl;
     private User user;
+    private List<String> groupMembers;
     private List<User> userList;
     private static UserController instance;
 
@@ -24,6 +25,14 @@ public class UserController extends Application {
         if (instance == null)
             instance = new UserController();
         return instance;
+    }
+
+    public List<String> getGroupMembers() {
+        return groupMembers;
+    }
+
+    public void setGroupMembers(List<String> groupMembers) {
+        this.groupMembers = groupMembers;
     }
 
     public User getUser() {
